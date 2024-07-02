@@ -27,7 +27,7 @@ def convert_to_video(input_file, duration, quality_option):
 
     # Prepare output video file name based on the input image name
     file_name, file_ext = os.path.splitext(os.path.basename(input_file))
-    output_file = f"{file_name}.mkv"
+    output_file = f"img-vid\\{file_name}.mkv"
 
     if quality_option == 1:  # Good Quality / Low Size
         ffmpeg_cmd = [
