@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import filedialog, simpledialog
 import os
 import subprocess
+import time
 
 def select_file():
     root = tk.Tk()
@@ -10,24 +11,22 @@ def select_file():
     # Open file dialog to select an image file
     file_path = filedialog.askopenfilename(
         title="Select an image file",
-        filetypes=[("Image Files", "*.jpg;*.jpeg;*.png"), ("All Files", "*.*")]
+        filetypes=[("Image Files", "*.jpg;*.jpeg;*.png; *.webmp"), ("All Files", "*.*")]
     )
 
     return file_path
 
 def convert_to_video(input_file, duration, quality_option):
     if not input_file:
-        print("No file selected or operation cancelled.")
-        return
+        return "No file selected or operation cancelled."
 
     # Check if the selected file exists
     if not os.path.exists(input_file):
-        print(f"Selected file does not exist: {input_file}")
-        return
+        return f"Selected file does not exist: {input_file}"
 
     # Prepare output video file name based on the input image name
     file_name, file_ext = os.path.splitext(os.path.basename(input_file))
-    output_file = f"img-vid\\{file_name}.mkv"
+    output_file = f"outputs\\img-vid\\{file_name}.mkv"
 
     if quality_option == 1:  # Good Quality / Low Size
         ffmpeg_cmd = [
@@ -51,51 +50,66 @@ def convert_to_video(input_file, duration, quality_option):
             output_file
         ]
     else:
-        print("Invalid quality option selected.")
-        return
+        return "Invalid quality option selected."
 
     # Run ffmpeg command
     try:
         subprocess.run(ffmpeg_cmd, check=True)
-        print(f"Conversion completed: {output_file}")
+        return f"Conversion completed: {output_file}"
     except subprocess.CalledProcessError as e:
-        print(f"Error occurred: {e}")
+        return f"Error occurred: {e}"
 
 def main():
-    input_file = select_file()
-    if not input_file:
-        return  # Exit if no file selected
-    
-    # Ask user for video duration
-    duration_str = simpledialog.askstring("Video Duration", "Enter video duration in seconds:")
-    if duration_str is None:
-        return  # Exit if user cancels
+    while True:
+        # Clear the screen
+        os.system('cls' if os.name == 'nt' else 'clear')
+        
+        # Run the main process
+        input_file = select_file()
+        if not input_file:
+            return  # Exit if no file selected
 
-    # Convert duration string to integer
-    try:
-        duration = int(duration_str)
-        if duration <= 0:
-            print("Duration must be a positive integer.")
-            return
-    except ValueError:
-        print("Invalid input. Please enter a valid integer.")
-        return
+        # Ask user for video duration
+        duration_str = simpledialog.askstring("Video Duration", "Enter video duration in seconds:")
+        if duration_str is None:
+            return  # Exit if user cancels
 
-    # Ask user for quality option
-    quality_option_str = simpledialog.askstring("Quality Option", "Choose quality option:\n1) Good Quality / Low Size\n2) Excellent Quality / Potentially Huge")
-    if quality_option_str is None:
-        return  # Exit if user cancels
-    
-    try:
-        quality_option = int(quality_option_str)
-        if quality_option not in [1, 2]:
-            print("Invalid quality option selected.")
-            return
-    except ValueError:
-        print("Invalid input. Please enter 1 or 2.")
-        return
+        # Convert duration string to integer
+        try:
+            duration = int(duration_str)
+            if duration <= 0:
+                print("Duration must be a positive integer.")
+                time.sleep(2)
+                continue
+        except ValueError:
+            print("Invalid input. Please enter a valid integer.")
+            time.sleep(2)
+            continue
 
-    convert_to_video(input_file, duration, quality_option)
+        # Ask user for quality option
+        quality_option_str = simpledialog.askstring("Quality Option", "Choose quality option:\n1) Good Quality / Low Size\n2) Excellent Quality / Potentially Huge")
+        if quality_option_str is None:
+            return  # Exit if user cancels
+
+        try:
+            quality_option = int(quality_option_str)
+            if quality_option not in [1, 2]:
+                print("Invalid quality option selected.")
+                time.sleep(2)
+                continue
+        except ValueError:
+            print("Invalid input. Please enter 1 or 2.")
+            time.sleep(2)
+            continue
+
+        summary = convert_to_video(input_file, duration, quality_option)
+        print(summary)
+        time.sleep(3)  # Pause to show the summary
+
+        # Ask if the user wants to run the process again
+        run_again = simpledialog.askstring("Continue", "Do you want to convert another image? (1: yes / 2: no)")
+        if run_again is None or run_again.lower() != '1':
+            break
 
 if __name__ == "__main__":
     main()
