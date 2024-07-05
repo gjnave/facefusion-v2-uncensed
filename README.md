@@ -1,3 +1,11 @@
+*****************
+This Repo clone has the uncensored version of FaceFusion. The installation on this model card is not excellent though and can end up confusing your system if you don't know what you're doing (it forces a lot of downloads).
+
+Rather (if you prefer) you can get my one-click installation script at: patreon.com/cognibuild/shop/facefusion-unleashed-1click-deepfake-256986
+
+GET GOING FAST
+***************
+
 FaceFusion
 ==========
 
