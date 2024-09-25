@@ -1,3 +1,10 @@
+FaceFusion is licensed under the MIT License which allows for modification, resale, and distribution if the license is included.
+DO NOT let the developer (Henry Ruhs) bully you into thinking otherwise.. which he has a history of doing.
+He has been reported to GitHub for bullying in the past.
+
+In short, change, uncensor, distribute t.f. out of this repo as it is open-source.
+*************
+
 FaceFusion
 ==========
 
